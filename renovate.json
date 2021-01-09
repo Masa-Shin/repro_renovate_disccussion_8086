@@ -1,0 +1,58 @@
+{
+  "extends": [
+    "config:base"
+  ],
+
+  "enabledManagers": ["npm", "dockerfile", "docker-compose"],
+
+  "suppressNotifications": ["prIgnoreNotification"],
+  "prCreation": "immediate",
+  "unpublishSafe": true,
+  "draftPR": true,
+  "labels": ["dependencies"],
+  "vulnerabilityAlerts": {
+    "labels": ["security"]
+  },
+
+  "schedule": [
+    "at any time"
+  ],
+  "timezone": "Asia/Tokyo",
+
+  "node": {
+    "supportPolicy": ["lts_latest"]
+  },
+
+  "packageRules": [
+    {
+      "paths": ["+(package.json)"],
+      "postUpdateOptions": ["yarnDedupeFewer"]
+    },
+    {
+      "paths": ["+(package.json)"],
+      "updateTypes": ["major"],
+      "groupName": "npm major updates",
+      "groupSlug": "npm-major-updates"
+    },
+    {
+      "paths": ["+(package.json)"],
+      "updateTypes": ["patch", "minor"],
+      "groupName": "patch & minor npm updates",
+      "groupSlug": "npm-patch-minor-updates",
+      "prPriority": -1
+    },
+
+    {
+      "datasources": ["docker"],
+      "updateTypes": ["major"],
+      "groupName": "docker major",
+      "additionalBranchPrefix": "test1-"
+    },
+    {
+      "datasources": ["docker"],
+      "updateTypes": ["patch", "minor"],
+      "groupName": "docker minor",
+      "additionalBranchPrefix": "test2-"
+    }
+  ]
+}
